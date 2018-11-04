@@ -1,0 +1,85 @@
+//this program uses taylor series to guess the sine of a degree angle
+
+#include <stdio.h>
+#include <math.h>
+
+void PreCalc();
+double Power(float, int);
+long long Fact(int);
+float Sin(float);
+
+int main(){
+	float x;
+	int caseVal, flag = 1;
+	
+	puts("This is a sine calculator.");
+	while(flag){
+		puts("To see some of the pre-calculated sines enter 1, to calculate other sines enter 2,\nand in order to terminate the application enter 0: ");
+		scanf("%d", &caseVal);
+		switch(caseVal){
+			case 1: PreCalc(); break;
+			case 2: 
+				printf("To calculate sin(x), please enter x as a degree angle: ");
+				scanf("%f", &x);
+	
+				//this will turn x into radian
+				x *= 0.0174533;
+	
+				printf("%.4f\n", Sin(x));
+				
+				break;
+			case 0:
+				flag = 0;
+				break;
+		
+			default: puts("You must enter a valid value.");
+		}
+	}
+	
+	return 0;
+}
+
+void PreCalc(){
+	puts("Note that the numbers inside sine are in degree angles;");
+	puts("These sines are calculated with the function I wrote:");
+	printf("sin(0) = %.5f\tsin(15) = %.5f\tsin(30) = %.5f\tsin(45) = %.5f\tsin(60) = %.5f\n", Sin(0), Sin(15 * 0.0174533), Sin(30 * 0.0174533), Sin(45 * 0.0174533), Sin(60 * 0.0174533));
+	printf("sin(75) = %.5f\tsin(90) = %.5f\tsin(105) = %.5f\tsin(120) = %.5f\tsin(135) = %.5f\n", Sin(75 * 0.0174533), Sin(90 * 0.0174533), Sin(105 * 0.0174533), Sin(120 * 0.0174533), Sin(135 * 0.0174533));
+	printf("sin(150) = %.4f\tsin(165) = %.4f\tsin(180) = %.4f\tsin(195) = %.4f\tsin(210) = %.5f\n", Sin(150 * 0.0174533), Sin(165 * 0.0174533), Sin(180 * 0.0174533), Sin(195 * 0.0174533), Sin(210 * 0.0174533));
+	printf("sin(225) = %.3f\tsin(240) = %.3f\tsin(255) = %.3f\tsin(270) = %.3f\tsin(285) = %.5f\n", Sin(225 * 0.0174533), Sin(240 * 0.0174533), Sin(255 * 0.0174533), Sin(270 * 0.0174533), Sin(285 * 0.0174533));
+	printf("sin(300) = %.1f \tsin(315) = %.1f \tsin(330) = %.1f \tsin(345) = %.1f \tsin(360) = %.1f \n", Sin(300 * 0.0174533), Sin(315 * 0.0174533), Sin(330 * 0.0174533), Sin(345 * 0.0174533), Sin(360 * 0.0174533));
+	
+	puts("And here are the sines calculated by the sine function in the math.h library:");
+	printf("sin(0) = %f\tsin(15) = %f\tsin(30) = %f\tsin(45) = %f\tsin(60) = %f\n", sin(0), sin(15 * 0.0174533), sin(30 * 0.0174533), sin(45 * 0.0174533), sin(60 * 0.0174533));
+	printf("sin(75) = %f\tsin(90) = %f\tsin(105) = %f\tsin(120) = %f\tsin(135) = %f\n", sin(75 * 0.0174533), sin(90 * 0.0174533), sin(105 * 0.0174533), sin(120 * 0.0174533), sin(135 * 0.0174533));
+	printf("sin(150) = %f\tsin(165) = %f\tsin(180) = %f\tsin(195) = %f\tsin(210) = %f\n", sin(150 * 0.0174533), sin(165 * 0.0174533), sin(180 * 0.0174533), sin(195 * 0.0174533), sin(210 * 0.0174533));
+	printf("sin(225) = %f\tsin(240) = %f\tsin(255) = %f\tsin(270) = %f\tsin(285) = %f\n", sin(225 * 0.0174533), sin(240 * 0.0174533), sin(255 * 0.0174533), sin(270 * 0.0174533), sin(285 * 0.0174533));
+	printf("sin(300) = %f\tsin(315) = %f\tsin(330) = %f\tsin(345) = %f\tsin(360) = %f\n", sin(300 * 0.0174533), sin(315 * 0.0174533), sin(330 * 0.0174533), sin(345 * 0.0174533), sin(360 * 0.0174533));
+}
+
+double Power(float x, int n){
+	if(n == 0)
+		return 1;
+	
+	return x * Power(x, n - 1);	
+}
+
+long long Fact(int n){
+	if(n == 0)
+		return 1;
+	
+	return n * Fact(n - 1);
+}
+
+float Sin(float x){
+	float taylorSeries = 0, newVar = 0;
+	int n = 0;
+	for(n = 0; n <= 10; n++){
+		newVar = ( Power(-1, n) * Power(x, (2*n + 1)) ) / 
+		Fact(2*n + 1);
+		
+		if(newVar >= 0.00001 || newVar <= -0.00001)
+			taylorSeries += newVar;
+		else break;
+	}
+	return taylorSeries;
+}
